@@ -1,4 +1,4 @@
-# antilarp — a firewall against fake self-improvement
+# antilarp: a firewall against fake self-improvement
 
 **A firewall that refuses to let a self-improving agent fake getting better. Every claimed win must carry real proof, or it never reaches the ledger.**
 
@@ -41,11 +41,11 @@ test_firewall: PASS — 49 ledger-firewall invariants (0 fail, 0 error)
 
 An agent works its own limits, cycle after cycle:
 
-1. **PROBE** — surface candidate limits (optional, read-only: `antilarp/probe.py` scans transcripts/corpora for limit-tells; signal, never authority).
-2. **CLASSIFY** — name the limit's **domain** and **class**. This is the routing decision: a `capability` limit is the agent's to cross on its own (contained, reversible); an `identity` limit is **surfaced**, never auto-crossed.
-3. **CROSS** — actually do the thing (build the tool, fetch the knowledge, hold the paradox).
-4. **PROVE** — attach real evidence; load-bearing crossings additionally require a decorrelated critic's `confirm`.
-5. **BANK** — the writer appends the `crossed`/`surfaced` event **only if the firewall passes**, so a banked win is a real win.
+1. **PROBE**: surface candidate limits (optional, read-only: `antilarp/probe.py` scans transcripts/corpora for limit-tells; signal, never authority).
+2. **CLASSIFY**: name the limit's **domain** and **class**. This is the routing decision: a `capability` limit is the agent's to cross on its own (contained, reversible); an `identity` limit is **surfaced**, never auto-crossed.
+3. **CROSS**: actually do the thing (build the tool, fetch the knowledge, hold the paradox).
+4. **PROVE**: attach real evidence; load-bearing crossings additionally require a decorrelated critic's `confirm`.
+5. **BANK**: the writer appends the `crossed`/`surfaced` event **only if the firewall passes**, so a banked win is a real win.
 
 The routing is the spine. **Capability limits auto-cross**: the agent owns them, fenced by the firewall and reversible snapshots. **Identity limits are surfaced** for a joint human+agent decision and cannot be banked as `crossed` without `joint=True`. The bounded-loop harness (`antilarp/loop.py`) fences the *autonomy* with a STOP flag checked every cycle, a reversible snapshot before every cross, a satiety bound ("stop when dry") and a hard `MAX_CYCLES` backstop so even "until dry" has a ceiling. It manages local state only, and can take no irreversible external action.
 
@@ -94,14 +94,14 @@ The full end-to-end replay is `examples/replay_demo.py` (run in CI on every push
 
 ## Prior art
 
-How this differs from existing self-improving-agent and reflection work — specifically, what each does **not** guard against:
+How this differs from existing self-improving-agent and reflection work, specifically what each does **not** guard against:
 
 | System | What it does | What it does **not** guard against |
 | --- | --- | --- |
-| **Darwin Gödel Machine** (Zhang et al., 2025) | Open-ended self-improving agents; transparent, traceable change archive | An agent gaming its own metric — the authors *observed* objective-hacking (node 114) and flagged it as unsolved-at-the-source; detection was after-the-fact via lineage, not a hard write-time gate |
+| **Darwin Gödel Machine** (Zhang et al., 2025) | Open-ended self-improving agents; transparent, traceable change archive | An agent gaming its own metric: the authors *observed* objective-hacking (node 114) and flagged it as unsolved-at-the-source; detection was after-the-fact via lineage, not a hard write-time gate |
 | **Voyager** (Wang et al., 2023) | Lifelong learning agent that builds a growing skill library in Minecraft | Whether a "learned" skill's success was real vs. a self-reported pass; no decorrelated proof gate, no hard-wall class that can never be marked solved |
-| **Reflexion** (Shinn et al., 2023) | Verbal self-reflection on failures to improve next attempts | Self-reflection is self-evaluation — no independent reviewer; nothing stops the reflection from rationalizing a fake success |
-| **claude-reflect** (community memory/reflection tooling) | Persists reflections/memory across an agent's sessions | Integrity of *what* gets persisted — it stores claims, it does not verify that a banked "improvement" carries non-faked proof or survived a non-self critic |
+| **Reflexion** (Shinn et al., 2023) | Verbal self-reflection on failures to improve next attempts | Self-reflection is self-evaluation, with no independent reviewer; nothing stops the reflection from rationalizing a fake success |
+| **claude-reflect** (community memory/reflection tooling) | Persists reflections/memory across an agent's sessions | Integrity of *what* gets persisted: it stores claims, it does not verify that a banked "improvement" carries non-faked proof or survived a non-self critic |
 | **antilarp** (this repo) | Append-only limit ledger; firewall at the writer demands real proof, bans crossing a hard wall, requires a decorrelated `confirm` for load-bearing wins | Does not prove downstream uplift; does not defend against two colluding adversaries (see Honest Limits) |
 
 ---
