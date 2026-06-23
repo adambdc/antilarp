@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Runtime ledger + loop state (the repo ships only the example ledger)
+/anti-larp-ledger.jsonl
+antilarp-loop-state.json
+antilarp-loop.log
+antilarp-loop.STOP
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/

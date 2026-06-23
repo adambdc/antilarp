@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+authors = [{ name = "Adam Carlton" }]
+name = "antilarp"
+version = "0.1.0"
+description = "The anti-LARP firewall: a self-improving agent's limit ledger that cannot record a fake win."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["agent", "self-improvement", "integrity", "firewall", "ledger", "verification"]
+# Zero runtime dependencies — stdlib only, zero-network (matches the original property).
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+antilarp = "antilarp.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["antilarp*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

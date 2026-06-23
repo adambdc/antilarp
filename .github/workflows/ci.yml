@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run the firewall + loop test suites (stdlib unittest, zero deps)
+        run: |
+          python3 tests/test_firewall.py
+          python3 tests/test_loop.py
+
+      - name: Replay demo runs end to end
+        run: python3 examples/replay_demo.py
+
+      - name: Privacy grep gate (fail on any private/personal coupling)
+        run: |
+          set -e
+          # The standalone repo must contain NO references to the source agent, its
+          # owner, absolute home paths, or specific model-vendor names. Word-bounded so
+          # "Eve" the persona is caught but "Every"/"never" are not. The workflow file
+          # is excluded because it necessarily names the very tokens it forbids.
+          PATTERN='\b(Adam|Eve|Anthropic|Claude|Codex|Gemini|OpenAI)\b|/Users/'
+          if grep -rInE "$PATTERN" \
+               --include='*.py' --include='*.md' --include='*.jsonl' \
+               --include='*.toml' --include='*.cfg' \
+               --exclude-dir='.git' . ; then
+            echo "PRIVACY GATE FAILED: a forbidden reference is present (see matches above)."
+            exit 1
+          fi
+          echo "privacy gate: clean."
